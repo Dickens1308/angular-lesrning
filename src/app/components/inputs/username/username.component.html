@@ -1,0 +1,18 @@
+<div>
+  <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+  <input type="text" name="username" id="username" placeholder="username"
+         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+         required="true"
+         [formControl]="control!"
+         [value]="control?.value"
+         [ngClass]="{'border-red-500 dark:border-red-600 dark:focus:border-red-500': control?.invalid && control?.touched,
+                   'border-green-500 dark:border-green-600 dark:focus:border-green-500': control?.valid && control?.touched,
+                   'dark:border-gray-600  dark:focus:ring-blue-500 dark:focus:border-blue-500': control?.untouched }"
+  >
+  <div *ngIf="!(control) || control.invalid && (control.dirty || control.touched)">
+    <div class="text-red-500 mt-2">
+      <div *ngIf="control?.errors?.['required']">Username is required.</div>
+      <div *ngIf="control?.errors?.['minlength']">Username should contain at least 4 characters.</div>
+    </div>
+  </div>
+</div>

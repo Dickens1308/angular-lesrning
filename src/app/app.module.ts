@@ -1,16 +1,35 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+/* JavaScript imports */
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {AppComponent} from "./app.component";
+import {AppRoutingModule} from './app-routing.module';
+import {ComponentsModule} from "./components/components.module";
+import { IndexComponent } from './pages/dashboard/index/index.component';
+import {PagesModule} from "./pages/pages.module";
+import {AuthModule} from "./modules/auth/auth.module";
+import {DashboardModule} from "./modules/dashboard/dashboard.module";
+import {GeneralModule} from "./modules/general/general.module";
+import {RouterOutlet} from "@angular/router";
+import {HttpClientModule} from "@angular/common/http";
 
-import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ComponentsModule,
+    PagesModule,
+    AuthModule,
+    DashboardModule,
+    GeneralModule,
+    RouterOutlet,
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

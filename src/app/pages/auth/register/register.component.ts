@@ -5,6 +5,8 @@ import {DomSanitizer} from "@angular/platform-browser";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../modules/auth/auth.service";
 import {RequestUser} from "../../../modules/auth/requestUser";
+import {Observable} from "rxjs";
+import {LoginResponse} from "../../../modules/auth/user";
 
 @Component({
   selector: 'app-register',
@@ -15,6 +17,8 @@ export class RegisterComponent {
   buttonName: string = 'Sign Up';
   appName: string = environment.company;
   logo: any = this.domSanitizer.bypassSecurityTrustResourceUrl(AllImages.logo);
+  errorMessage: string = '';
+
   formGroup: FormGroup = new FormGroup({
     'username': new FormControl('', [
       Validators.required,
@@ -46,10 +50,25 @@ export class RegisterComponent {
       user.password = this.formGroup.get('password')?.value || '';
       user.agreement = true;
 
-      this.authService.registerUser(user);
+      this.registerUser(user);
     } else {
       console.log("Form is invalid");
       this.authService.invalidateForm(this.formGroup);
     }
   }
+
+  registerUser(user: RequestUser): void {
+    const response: Observable<LoginResponse> = this.authService.registerUser(user);
+
+    response.subscribe({
+      next: (data: LoginResponse): void => {
+        console.log(data);
+      },
+      error: (error: any): void => {
+        console.log(error.error.message);
+        this.errorMessage = error.error.message;
+      }
+    });
+  }
+
 }

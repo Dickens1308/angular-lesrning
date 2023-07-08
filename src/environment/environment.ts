@@ -1,7 +1,6 @@
 export const environment: any = {
   production: false,
-  apiUrl: 'https://login-signup.p.rapidapi.com/public/v1/login.php',
-  apiToken: '394e9338b73a9f061b1968ceaa050a',
+  apiUrl: 'http://localhost:8000/api/v1',
   appVersion: '1.0.0',
   appLogo: '/assets/images/logo.png',
   company: 'Cloudstack',

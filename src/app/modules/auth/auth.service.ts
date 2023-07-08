@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 import {RequestUser} from "./requestUser";
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environment/environment";
+import {LoginResponse} from "./user";
+import {Observable} from "rxjs";
+import {urls} from "../../core/constants/urls";
 
 
 @Injectable({
@@ -13,13 +15,23 @@ export class AuthService {
   constructor(private httpClient: HttpClient) {
   }
 
-  registerUser = (user: RequestUser): void => {}
-
-  loginUser = (user: RequestUser): void => {
-    console.log(user.email, user.password, user.remember);
+  registerUser = (user: RequestUser): Observable<LoginResponse> => {
+    return this.httpClient.post<LoginResponse>(`${urls.registerUrl}`, {
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      agreement: user.agreement,
+    });
   }
 
-  invalidateForm(formGroup: FormGroup): void {
+  loginUser = (user: RequestUser): Observable<LoginResponse> => {
+    return this.httpClient.post<LoginResponse>(`${urls.loginUrl}`, {
+      email: user.email,
+      password: user.password,
+    });
+  }
+
+  invalidateForm = (formGroup: FormGroup): void => {
     Object.values(formGroup.controls).forEach((control: any): void => {
       control.markAsTouched();
 
@@ -27,5 +39,9 @@ export class AuthService {
         this.invalidateForm(control);
       }
     });
+  }
+
+  loggedIn = (): boolean => {
+    return !!localStorage.getItem('token');
   }
 }

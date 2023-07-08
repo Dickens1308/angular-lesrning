@@ -1,14 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {DashboardComponent} from "../../components/layouts/dashboard/dashboard.component";
 import {IndexComponent} from "../../pages/dashboard/index/index.component";
+import {canActivateUser} from "../../core/guards/auth.guard";
 
 const routes: Routes = [
   {
-    path: '', // <---- parent component declared here
+    path: '',
     component: DashboardComponent,
+    canActivate: [canActivateUser],
     children: [
-      {path: "", component: IndexComponent}, // <---- child components declared here
+      {path: '', component: IndexComponent},
     ]
   }
 ];
@@ -17,4 +19,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class DashboardRoutingModule { }
+export class DashboardRoutingModule {
+}

@@ -8,6 +8,7 @@ import {Observable} from "rxjs";
   templateUrl: './blogs.component.html',
   styleUrls: ['./blogs.component.css']
 })
+
 export class BlogsComponent {
   postList$: Observable<PostModel[]>;
   loadingPost: boolean = false;

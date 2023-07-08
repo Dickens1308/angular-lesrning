@@ -4,7 +4,6 @@ import {NgModule} from '@angular/core';
 import {AppComponent} from "./app.component";
 import {AppRoutingModule} from './app-routing.module';
 import {ComponentsModule} from "./components/components.module";
-import { IndexComponent } from './pages/dashboard/index/index.component';
 import {PagesModule} from "./pages/pages.module";
 import {AuthModule} from "./modules/auth/auth.module";
 import {DashboardModule} from "./modules/dashboard/dashboard.module";

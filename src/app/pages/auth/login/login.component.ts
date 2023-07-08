@@ -2,8 +2,12 @@ import {Component} from '@angular/core';
 import {environment} from "../../../../environment/environment";
 import {AllImages} from "../../../core/constants/images";
 import {DomSanitizer} from "@angular/platform-browser";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../modules/auth/auth.service";
+import {RequestUser} from "../../../modules/auth/requestUser";
+import {Observable} from "rxjs";
+import {LoginResponse} from "../../../modules/auth/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -14,6 +18,7 @@ export class LoginComponent {
   buttonName: string = 'Sign In';
   appName: string = environment.company;
   logo: any = this.domSanitizer.bypassSecurityTrustResourceUrl(AllImages.logo);
+  errorMessages: string = '';
 
   formGroup: FormGroup = new FormGroup({
     'email': new FormControl('', [
@@ -25,9 +30,8 @@ export class LoginComponent {
       Validators.minLength(6),
     ]),
   });
-  protected readonly event = event;
 
-  constructor(private domSanitizer: DomSanitizer, private authService: AuthService) {
+  constructor(private domSanitizer: DomSanitizer, private authService: AuthService, private router: Router) {
   }
 
   getFormControl(value: string): FormControl {
@@ -36,10 +40,33 @@ export class LoginComponent {
 
   submitForm(): void {
     if (this.formGroup.valid) {
-      console.log("Form is valid")
+      this.loginUser();
     } else {
-      console.log("Form is invalid");
       this.authService.invalidateForm(this.formGroup);
     }
+  }
+
+  loginUser(): void {
+    let user: RequestUser = {} as RequestUser;
+    user.email = this.formGroup.get('email')?.value || '';
+    user.password = this.formGroup.get('password')?.value || '';
+
+    const response: Observable<LoginResponse> = this.authService.loginUser(user);
+
+    response.subscribe({
+      next: (data: LoginResponse): void => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('roles', JSON.stringify(data.roles));
+
+        this.errorMessages = data.message;
+        this.router.navigate(['/dashboard']).then(r => console.log(r));
+      },
+      error: (error: any): void => {
+        console.log(error.error.message);
+        this.errorMessages = error.error.message;
+      }
+    });
+
   }
 }

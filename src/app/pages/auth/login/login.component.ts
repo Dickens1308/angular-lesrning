@@ -8,6 +8,7 @@ import {RequestUser} from "../../../modules/auth/requestUser";
 import {Observable} from "rxjs";
 import {LoginResponse} from "../../../modules/auth/user";
 import {Router} from "@angular/router";
+import {SecurityService} from "../../../core/services/security.service";
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class LoginComponent {
     ]),
   });
 
-  constructor(private domSanitizer: DomSanitizer, private authService: AuthService, private router: Router) {
+  constructor(private domSanitizer: DomSanitizer, private authService: AuthService, private router: Router, private security: SecurityService) {
   }
 
   getFormControl(value: string): FormControl {
@@ -55,9 +56,9 @@ export class LoginComponent {
 
     response.subscribe({
       next: (data: LoginResponse): void => {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        localStorage.setItem('roles', JSON.stringify(data.roles));
+        localStorage.setItem(this.security.encryptItem('token'), this.security.encryptData(data.token));
+        localStorage.setItem(this.security.encryptItem('user'), this.security.encryptData(JSON.stringify(data.user)));
+        localStorage.setItem(this.security.encryptItem('roles'), this.security.encryptData(JSON.stringify(data.roles)));
 
         this.errorMessages = data.message;
         this.router.navigate(['/dashboard']).then(r => console.log(r));

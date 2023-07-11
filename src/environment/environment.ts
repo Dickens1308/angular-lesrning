@@ -6,5 +6,7 @@ export const environment: any = {
   company: 'Cloudstack',
   defaultLanguage: 'en-US',
   blogUrl: 'https://jsonplaceholder.typicode.com/posts',
+  secretKeyItem: 'secretKey',
+  secretKeyData: 'YourSecretKey',
 };
 
